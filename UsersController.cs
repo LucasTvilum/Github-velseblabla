@@ -18,9 +18,9 @@ public class UsersController : ControllerBase
     // SPRINT 1 - feature/register-user
     // POST /users/register
     [HttpPost("register")]
-    public IActionResult Register([FromBody] User newUser)
+    public IActionResult Register([FromBody] User? newUser)
     {
-        if (string.IsNullOrWhiteSpace(newUser.Username) || string.IsNullOrWhiteSpace(newUser.Password))
+        if (newUser == null || string.IsNullOrWhiteSpace(newUser.Username) || string.IsNullOrWhiteSpace(newUser.Password))
             return BadRequest("Username og password er påkrævet.");
 
         if (_repository.GetByUsername(newUser.Username) != null)
@@ -33,8 +33,11 @@ public class UsersController : ControllerBase
     // SPRINT 1 - feature/login-auth
     // POST /users/login
     [HttpPost("login")]
-    public IActionResult Login([FromBody] User loginRequest)
+    public IActionResult Login([FromBody] User? loginRequest)
     {
+        if (loginRequest == null || string.IsNullOrWhiteSpace(loginRequest.Username) || string.IsNullOrWhiteSpace(loginRequest.Password))
+            return BadRequest("Username og password er påkrævet.");
+
         var user = _repository.GetByUsername(loginRequest.Username);
 
         if (user == null || user.Password != loginRequest.Password)
