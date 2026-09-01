@@ -2,7 +2,7 @@
 <html lang="da">
 <head>
 <meta charset="UTF-8">
-<title>Login</title>
+<title>Opret bruger</title>
 <style>
   body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f4f4f4; }
   form { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 260px; }
@@ -11,28 +11,28 @@
   button { width: 100%; padding: 0.5rem; background: #333; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
   button:hover { background: #555; }
   #message { margin-top: 1rem; font-size: 0.9rem; }
-      a { display: block; margin-top: 1rem; text-align: center; font-size: 0.85rem; }
+  a { display: block; margin-top: 1rem; text-align: center; font-size: 0.85rem; }
 </style>
 </head>
 <body>
-<form id="loginForm">
-  <h1>Login</h1>
+<form id="registerForm">
+  <h1>Opret bruger</h1>
   <input type="text" id="username" placeholder="Brugernavn" required>
   <input type="password" id="password" placeholder="Password" required>
-  <button type="submit">Log ind</button>
+  <button type="submit">Opret</button>
   <div id="message"></div>
-  <a href="/register.html">Ny bruger? Opret dig her</a>
+  <a href="/login.html">Har du allerede en bruger? Log ind</a>
 </form>
 
 <script>
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
   const message = document.getElementById('message');
   message.textContent = '';
 
-  const res = await fetch('/users/login', {
+  const res = await fetch('/users/register', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password })
@@ -40,7 +40,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 
   const text = await res.text();
   message.style.color = res.ok ? 'green' : 'crimson';
-  message.textContent = text;
+  message.textContent = res.ok ? 'Bruger oprettet! Du kan nu logge ind.' : text;
 });
 </script>
 </body>
