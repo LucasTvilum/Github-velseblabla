@@ -1,5 +1,14 @@
+## .NET
 bin/
 obj/
-.vs/
-.idea/
 *.user
+*.suo
+
+## IDE
+.vs/
+.vscode/
+.idea/
+
+## OS
+.DS_Store
+Library/

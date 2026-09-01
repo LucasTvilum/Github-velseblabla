@@ -35,15 +35,25 @@ public class UsersController : ControllerBase
     [HttpPost("login")]
     public IActionResult Login([FromBody] User? loginRequest)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         if (loginRequest == null || string.IsNullOrWhiteSpace(loginRequest.Username) || string.IsNullOrWhiteSpace(loginRequest.Password))
             return BadRequest("Username og password er påkrævet.");
 
-        var user = _repository.GetByUsername(loginRequest.Username);
+        try
+        {
+            var user = _repository.GetByUsername(loginRequest.Username);
 
-        if (user == null || user.Password != loginRequest.Password)
-            return Unauthorized("Forkert brugernavn eller password.");
+            if (user == null || user.Password != loginRequest.Password)
+                return Unauthorized("Forkert brugernavn eller password.");
 
-        return Ok($"Velkommen, {user.Username}! Login lykkedes.");
+            return Ok($"Velkommen, {user.Username}! Login lykkedes.");
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Der opstod en intern serverfejl.");
+        }
     }
 
     // SPRINT 2 - feature/get-user-by-id
